@@ -1,0 +1,1 @@
+enum TankState { Idle, Aiming, FixingAim, Shooting, Cooldown }
