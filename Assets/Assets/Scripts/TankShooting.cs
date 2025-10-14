@@ -1,3 +1,4 @@
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 public class TankShooting : MonoBehaviour
@@ -35,75 +36,86 @@ public class TankShooting : MonoBehaviour
 
         switch (state)
         {
+
             case TankState.Idle:
+            if(Vector2.Distance(transform.position, player.transform.position) < 10f)
+                ChangeState(TankState.Turning);
                 break;
+            case TankState.Turning:
+                FacePlayer();
+                break;
+
             case TankState.Aiming:
+                Aim();
                 break;
-            case TankState.FixingAim:
-                break;
-            case TankState.Shooting:
-                break;
-        }
-        if (state == TankState.FixingAim) return;
 
-        if (state == TankState.Idle)
-        {
-            FacePlayer();
-            t += Time.deltaTime;
+
         }
 
-        if (state == TankState.Idle && t > shootingTimer)
-        {
-            state = TankState.Aiming;
-        }
 
-        if (state == TankState.Aiming)
-        {
-            Aim();
-            t = 0;
-        }
     }
-
+    Vector3 direction;
     void FixedUpdate()
     {
-        if (state == TankState.FixingAim)
+        switch (state)
         {
-            spawnedAim.transform.position = Vector3.MoveTowards(spawnedAim.transform.position, randomAimPosition,
-             aimSpeed * Time.fixedDeltaTime);
+            case TankState.FixingAim:
+                FixingAim();
+                break;
 
-            if (Vector2.Distance(spawnedAim.transform.position, randomAimPosition) < 0.1f)
-            {
-                var randomCircle = Random.insideUnitCircle * 1.5f;
-                randomAimPosition = player.transform.position + new Vector3(randomCircle.x, randomCircle.y, 0);
-            }
-            t += Time.deltaTime;
-        }
-        if (state == TankState.FixingAim && t > shootingTimer)
-        {
-            Shoot();
-            state = TankState.Shooting;
-        }
+            case TankState.Shooting:
+                Shoot();
+                break;
 
-        if (state == TankState.Shooting)
-            spawnedBullet.transform.position = Vector3.MoveTowards(spawnedBullet.transform.position, spawnedAim.transform.position,
-              bulletSpeed * Time.fixedDeltaTime);
+            case TankState.BulletShooting:
+            if(spawnedBullet != null)
+                spawnedBullet.transform.Translate(direction.normalized * bulletSpeed * Time.fixedDeltaTime, Space.World);
+                break;
+        }
     }
 
-    void Aim()
+    private void FixingAim()
     {
-        var randomCircle = Random.insideUnitCircle * 1.5f;
-        randomAimPosition = player.transform.position + new Vector3(randomCircle.x, randomCircle.y, 0);
-        spawnedAim = Instantiate(aimPrefab, randomAimPosition, Quaternion.identity);
-        state = TankState.FixingAim;
-    }
+        spawnedAim.transform.position = Vector3.MoveTowards(spawnedAim.transform.position, randomAimPosition,
+         aimSpeed * Time.fixedDeltaTime);
 
+        if (Vector2.Distance(spawnedAim.transform.position, randomAimPosition) < 0.1f)
+        {
+            var randomCircle = Random.insideUnitCircle * 3f;
+            randomAimPosition = player.transform.position + new Vector3(randomCircle.x, randomCircle.y, 0);
+        }
+        t += Time.deltaTime;
+        if (t > shootingTimer)
+        {
+            ChangeState(TankState.Shooting);
+        }
+    }
 
     void Shoot()
     {
         spawnedBullet = Instantiate(bulletPrefab, bulletSpawnPoint.transform.position, bulletSpawnPoint.transform.rotation);
+        direction = new Vector3(spawnedAim.transform.position.x, spawnedAim.transform.position.y) - spawnedBullet.transform.position;
+        Destroy(spawnedAim);
+        ChangeState(TankState.BulletShooting);
     }
+
+    void Aim()
+    {
+        var randomCircle = Random.insideUnitCircle * 3f;
+        randomAimPosition = player.transform.position + new Vector3(randomCircle.x, randomCircle.y, 0);
+        spawnedAim = Instantiate(aimPrefab, randomAimPosition, Quaternion.identity);
+        state = TankState.FixingAim;
+        t = 0;
+    }
+
     void FacePlayer()
     {
+        t += Time.deltaTime;
+        if (t > shootingTimer)
+        {
+            ChangeState(TankState.Aiming);
+        }
+
         Vector2 direction = player.transform.position - turret.transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         Quaternion targetRotation = Quaternion.Euler(0, 0, angle + 20);

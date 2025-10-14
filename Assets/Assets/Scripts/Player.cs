@@ -7,7 +7,6 @@ public class Player : MonoBehaviour
     [SerializeField] private float bulletSpeed;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform bulletSpawnLeft, bulletSpawnRight;
-    [SerializeField] private List<GameObject> activeBullets;
     bool isShootingLeft = true;
     [SerializeField] float fireRate = 0.5f;
     [SerializeField] float originalFireRate = 0.5f;
@@ -15,7 +14,6 @@ public class Player : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Bullet.OnBulletDestroyed += RemoveBullet;
     }
 
     // Update is called once per frame
@@ -36,7 +34,7 @@ public class Player : MonoBehaviour
                 }
                 isShootingLeft = !isShootingLeft;
 
-                activeBullets.Add(bullet);
+                bullet.GetComponent<Bullet>().SetupBullet(bulletSpeed);
                 fireRate = 0;
             }
         }
@@ -46,20 +44,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
-    {
-        if (activeBullets == null) return;
 
-        foreach (var bullet in activeBullets)
-        {
-            bullet.transform.Translate(Vector2.up * bulletSpeed * Time.fixedDeltaTime);
-        }
-    }
-    
-    public void RemoveBullet(GameObject bullet)
-    {
-        activeBullets.Remove(bullet);
-    }
 
     void OnTriggerEnter2D(Collider2D collider)
     {

@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public static Action<GameObject> OnBulletDestroyed;
     public Animator animator;
+
+    [SerializeField] private float bulletSpeed;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        StartCoroutine(BulletLifetime(8f));
+        StartCoroutine(BulletLifetime(2.25f));
+    }
+    public void SetupBullet(float bulletSpeed)
+    {
+        this.bulletSpeed = bulletSpeed;
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-
+        this.transform.Translate(Vector2.up * bulletSpeed * Time.fixedDeltaTime);
     }
 
     IEnumerator BulletLifetime(float lifetime)
@@ -28,14 +33,12 @@ public class Bullet : MonoBehaviour
     {
         if (collider.CompareTag("Ground"))
         {
-           StopAndDestroyBullet();
+            StopAndDestroyBullet();
         }
     }
     private void StopAndDestroyBullet()
     {
-        OnBulletDestroyed?.Invoke(gameObject);
         animator.Play("BulletDestoryAnim");
-
     }
     public void DestroyBullet()
     {

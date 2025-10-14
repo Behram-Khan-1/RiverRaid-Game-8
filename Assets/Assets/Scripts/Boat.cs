@@ -25,9 +25,15 @@ public class Boat : MonoBehaviour
     {
         if (collider.CompareTag("Ground"))
         {
-            Debug.Log("Collided with ground");
+            // Debug.Log("Collided with ground");
             Turn();
             //Turn Direction
+        }
+
+        if(collider.CompareTag("Bullet"))
+        {
+            Destroy(collider.gameObject);
+            Destroy(gameObject);
         }
     }
 

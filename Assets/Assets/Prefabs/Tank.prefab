@@ -192,9 +192,12 @@ MonoBehaviour:
   aimPrefab: {fileID: 9022770090079955146, guid: b99fb75304114514296f9f2051147b3c, type: 3}
   bulletSpawnPoint: {fileID: 3495880534667198019}
   turret: {fileID: 7264569492334864056}
-  bulletSpeed: 3
-  turretRotationSpeed: 90
-  shootingTimer: 2
+  bulletSpeed: 6
+  aimSpeed: 6
+  turretRotationSpeed: 200
+  shootingTimer: 1
+  state: 0
+  t: 0
 --- !u!1 &5962939399721985673
 GameObject:
   m_ObjectHideFlags: 0
