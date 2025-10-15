@@ -6,7 +6,7 @@ public class Bridge : MonoBehaviour
     [SerializeField] private int health;
     void OnTriggerEnter2D(Collider2D collider)
     {
-        if (health <= 0)
+        if (health == 0)
         {
             BridgeDestroyed();
         }
@@ -15,12 +15,19 @@ public class Bridge : MonoBehaviour
             health--;
             Destroy(collider.gameObject);
         }
+        if (collider.CompareTag("Player"))
+        {
+            //Player Killed
+            GameManager.instance.OnPlayerDead();
+        }
+
+
     }
-    
+
     void BridgeDestroyed()
     {
         //Play Bridge Destory Animation   
         Destroy(gameObject);
     }
- 
+
 }

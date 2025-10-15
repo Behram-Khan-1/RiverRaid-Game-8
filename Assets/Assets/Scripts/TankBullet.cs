@@ -18,11 +18,11 @@ public class TankBullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        if(collider.CompareTag("Player"))
+        if(collider.transform.root.CompareTag("Player"))
         {
             Destroy(gameObject);
+            GameManager.instance.OnPlayerDead();
             //Player Killed
-            
         }
     }
 }

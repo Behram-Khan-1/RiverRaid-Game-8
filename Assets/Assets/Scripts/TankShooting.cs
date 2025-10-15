@@ -33,13 +33,13 @@ public class TankShooting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (player == null) return;
         switch (state)
         {
 
             case TankState.Idle:
-            if(Vector2.Distance(transform.position, player.transform.position) < 10f)
-                ChangeState(TankState.Turning);
+                if (Vector2.Distance(transform.position, player.transform.position) < 10f)
+                    ChangeState(TankState.Turning);
                 break;
             case TankState.Turning:
                 FacePlayer();
@@ -57,6 +57,7 @@ public class TankShooting : MonoBehaviour
     Vector3 direction;
     void FixedUpdate()
     {
+        if (player == null) return;
         switch (state)
         {
             case TankState.FixingAim:
@@ -68,8 +69,8 @@ public class TankShooting : MonoBehaviour
                 break;
 
             case TankState.BulletShooting:
-            if(spawnedBullet != null)
-                spawnedBullet.transform.Translate(direction.normalized * bulletSpeed * Time.fixedDeltaTime, Space.World);
+                if (spawnedBullet != null)
+                    spawnedBullet.transform.Translate(direction.normalized * bulletSpeed * Time.fixedDeltaTime, Space.World);
                 break;
         }
     }

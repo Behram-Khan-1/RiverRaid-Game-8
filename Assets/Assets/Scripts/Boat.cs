@@ -6,7 +6,7 @@ public class Boat : MonoBehaviour
 {
     [SerializeField] private float speed = 5f;
     Animator animator;
-    bool isTurning; 
+    bool isTurning;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -30,10 +30,17 @@ public class Boat : MonoBehaviour
             //Turn Direction
         }
 
-        if(collider.CompareTag("Bullet"))
+        if (collider.CompareTag("Bullet"))
         {
             Destroy(collider.gameObject);
             Destroy(gameObject);
+        }
+
+        if (collider.CompareTag("Player"))
+        {
+            GameManager.instance.OnPlayerDead();
+            Destroy(gameObject);
+            //Player Killed
         }
     }
 
@@ -49,7 +56,7 @@ public class Boat : MonoBehaviour
         }
         isTurning = true;
     }
-    
+
     public void StopTurn()
     {
         transform.Rotate(new Vector3(0f, 180f, 0f), Space.Self);

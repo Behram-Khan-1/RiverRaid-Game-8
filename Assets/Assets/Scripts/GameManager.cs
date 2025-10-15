@@ -1,31 +1,41 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     [SerializeField] private PlayerMovement PlayerMovement;
+    private Player Player;
     [SerializeField] private RiverChunkManager riverChunkManager;
     [SerializeField] private int spawnedChunks;
+
+    [SerializeField] private Slider fuelSlider;
+    [SerializeField] private GameObject DeathUI;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
         instance = this;
-    }
-    void Start()
-    {
         PlayerMovement.onSpeedChange += Player_YSpeedChange;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+        Player = PlayerMovement.GetComponent<Player>();
 
     }
 
-    public void IncreasePlayerFuel()
+    public void GameOver()
     {
+        Debug.Log("Game Over");
+        DeathUI.SetActive(true);
+        Time.timeScale = 0;
+    }
 
+    public void ChangeFuelSlider(float fuel)
+    {
+        fuelSlider.value = fuel;
+    }
+
+    public void IncreasePlayerFuel(float fuelRefillAmount)
+    {
+        Player.IncreaseFuel(fuelRefillAmount);
     }
 
     public void Player_YSpeedChange(float speed)
@@ -52,13 +62,18 @@ public class GameManager : MonoBehaviour
             chunkManager.isBridge = true;
             spawnedChunks = 0;
         }
-        
-        if( chunkManager != null)
+
+        if (chunkManager != null)
         {
             chunkManager.SpawnContent(fuelSpawnChance, tankSpawnChance, boatSpawnChance);
             spawnedChunks++;
         }
-      
+    }
+    
+    public void OnPlayerDead()
+    {
+        GameOver();
+        Player.PlayerDeath();
     }
 
 
