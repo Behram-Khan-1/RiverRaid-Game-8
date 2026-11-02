@@ -197,7 +197,10 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      tank turret2_0: 1175916002186229583
+      tank turret2_1: 6069565939128507689
+      tank turret2_2: 5654093168050614064
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

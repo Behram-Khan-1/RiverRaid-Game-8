@@ -397,7 +397,18 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Tank turret shot2_0: -5287736582699966057
+      Tank turret shot2_1: -2707764191096205018
+      Tank turret shot2_10: 8034198669890459421
+      Tank turret shot2_2: 4132704113625314763
+      Tank turret shot2_3: 6963577276583221543
+      Tank turret shot2_4: 1885206263557392461
+      Tank turret shot2_5: 2187040937998840400
+      Tank turret shot2_6: 4010328196358616865
+      Tank turret shot2_7: 7527031625094732289
+      Tank turret shot2_8: 1638300016230885667
+      Tank turret shot2_9: -3612340959294749735
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
